@@ -1,0 +1,43 @@
+---
+title: "Testing tmap R package"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+Brasil estados por população
+
+
+```{r}
+library(sidrar)
+library(tidyverse)
+library(pins)
+library(tmap)
+library(brmap)
+```
+
+```{r data_import}
+# # importa o número de habitantes de cada estado (IBGE)
+# populacao <- get_sidra(6579, period = "all", geo = "State", format = 3) %>% as_tibble()
+# pin(populacao, name = "test-tmap")
+
+map_data <-
+  pin_get("test-tmap") %>%
+  # transforma as variaveis para compatibilizar com o brmap
+  mutate(
+    estado_cod = as.numeric(`Unidade da Federação (Código)`),
+    ano = as.numeric(Ano)
+    ) %>%
+  right_join(brmap::brmap_estado_simples, by = "estado_cod")
+
+map_data <- st_as_sf(map_data)
+```
+
+
+```{r}
+map_data %>% filter(ano == 2019) %>%
+  tm_shape(name = "Brasil, 2019") +
+  tm_polygons("Valor", title = "População",
+              legend.format = list(big.num.abbr = c("mi" = 6, "bi" = 9)))
+```
+

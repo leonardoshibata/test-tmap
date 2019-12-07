@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tmap)
+```
+
+```{r}
+data("World")
+
+tm_shape(World) +
+    tm_polygons("HPI")
+```
+
+
+```{r}
+tmap_mode("view")
+
+tm_shape(World) +
+    tm_polygons("HPI")
+```
+
+
+
+```{r}
+data(World, metro, rivers, land)
+
+tmap_mode("plot")
+## tmap mode set to plotting
+tm_shape(land) +
+    tm_raster("elevation", palette = terrain.colors(10)) +
+tm_shape(World) +
+    tm_borders("white", lwd = .5) +
+    tm_text("iso_a3", size = "AREA") +
+tm_shape(metro) +
+    tm_symbols(col = "red", size = "pop2020", scale = .5) +
+tm_legend(show = FALSE)
+```
+
+
+```{r}
+tmap_tip()
+?'tmap-element'
+```
+
