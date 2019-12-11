@@ -44,10 +44,23 @@ map_data <- st_as_sf(map_data)
 ```
 
 
-```{r plot}
-map_data %>% filter(ano == 2019) %>%
-  tm_shape(name = "Brasil, 2019") +
+```{r base_map}
+base_map <- map_data %>%
+  filter(ano == 2019) %>%
+  tm_shape(name = "Brasil, 2019")
+```
+
+```{r simple_map}
+base_map +
   tm_polygons("Valor", title = "População",
               legend.format = list(big.num.abbr = c("mi" = 6, "bi" = 9)))
+```
+
+
+```{r bubbles}
+base_map +
+  tm_polygons("white") +
+  tm_bubbles("Valor", title.size = "População",
+             legend.format = list(big.num.abbr = c("mi" = 6, "bi" = 9)))
 ```
 
